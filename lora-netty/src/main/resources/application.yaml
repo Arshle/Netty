@@ -1,0 +1,4 @@
+netty:
+  server:
+    port: 18000
+
