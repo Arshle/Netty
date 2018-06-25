@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!--base-->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.jsptpd.netty</groupId>
+  <artifactId>netty-client</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>netty-client</name>
+  <packaging>jar</packaging>
+  <description>netty client components</description>
+  <url>http://www.jsptpd.com</url>
+  <!--properties-->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <netty.common.version>1.0.0-SNAPSHOT</netty.common.version>
+  </properties>
+  <!--dependencies-->
+  <dependencies>
+    <dependency>
+      <groupId>com.jsptpd.netty</groupId>
+      <artifactId>netty-common</artifactId>
+      <version>${netty.common.version}</version>
+    </dependency>
+  </dependencies>
+  <!--build-->
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
