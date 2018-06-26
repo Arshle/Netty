@@ -72,8 +72,6 @@ public class NettyServer {
                     ch.pipeline().addLast("requestHandler",new NettyRequestHandler());
                 }
             });
-            //发送队列长度
-            bootstrap.childOption(ChannelOption.SO_BACKLOG,serverConfig.getBackLog());
             //立即发送TCP包
             bootstrap.childOption(ChannelOption.TCP_NODELAY,serverConfig.isTcpNoDelay());
             //检测与客户端的心跳

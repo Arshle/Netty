@@ -190,14 +190,6 @@ public class NettyClientConfiguration {
         this.allowHalfClosure = allowHalfClosure;
     }
 
-    public boolean isDecodeResponse() {
-        return decodeResponse;
-    }
-
-    public void setDecodeResponse(boolean decodeResponse) {
-        this.decodeResponse = decodeResponse;
-    }
-
     public boolean isEncodeRequest() {
         return encodeRequest;
     }

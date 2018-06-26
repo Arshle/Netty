@@ -9,7 +9,6 @@ package com.jsptpd.netty.handler;
 import com.jsptpd.netty.constants.NettyConstants;
 import com.jsptpd.netty.model.NettyRequest;
 import com.jsptpd.netty.model.NettyResponse;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, NettyRequest msg){
-        logger.info("处理链接受Netty请求:" + msg);
+        logger.info("接收Netty请求:" + msg);
         try {
             ctx.write(NettyResponse.valueOf("服务端回复".getBytes(NettyConstants.CHARSET_UTF8)));
             ctx.flush();
@@ -48,7 +47,7 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
         super.channelActive(ctx);
         SocketAddress address = ctx.channel().remoteAddress();
         if(address != null){
-            logger.info("Netty连接建立|remoteAddress:" + address);
+            logger.info("Netty建立与客户端连接|remoteAddress:" + address);
         }
     }
     /**
