@@ -6,7 +6,10 @@
  */
 package com.jsptpd.netty.handler;
 
+import com.jsptpd.netty.constants.NettyConstants;
 import com.jsptpd.netty.model.NettyRequest;
+import com.jsptpd.netty.model.NettyResponse;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -28,7 +31,12 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, NettyRequest msg){
         logger.info("处理链接受Netty请求:" + msg);
-
+        try {
+            ctx.write(NettyResponse.valueOf("服务端回复".getBytes(NettyConstants.CHARSET_UTF8)));
+            ctx.flush();
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+        }
     }
     /**
      * 通道建立连接回调方法
@@ -43,7 +51,12 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
             logger.info("Netty连接建立|remoteAddress:" + address);
         }
     }
-
+    /**
+     * 异常捕获
+     * @param ctx 处理链上下文
+     * @param cause 异常
+     * @throws Exception 异常
+     */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         super.exceptionCaught(ctx, cause);

@@ -1,14 +1,14 @@
 /*
- * FileName: NettyResponseEncoder.java
+ * FileName: NettyRequestEncoder.java
  * Author:   Arshle
- * Date:     2018年06月25日
- * Description: Netty响应编码器
+ * Date:     2018年06月26日
+ * Description: Netty请求入站编码器
  */
 package com.jsptpd.netty.encoder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsptpd.netty.constants.NettyConstants;
-import com.jsptpd.netty.model.NettyResponse;
+import com.jsptpd.netty.model.NettyRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -16,25 +16,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 〈Netty响应编码器〉<br>
- * 〈统一协议的响应体编码〉
+ * 〈Netty请求入站编码器〉<br>
+ * 〈将Netty请求编码成二进制字节数组〉
  *
  * @author Arshle
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本]（可选）
  */
-public class NettyResponseEncoder extends MessageToByteEncoder<NettyResponse> {
+public class NettyRequestEncoder extends MessageToByteEncoder<NettyRequest> {
 
-    private Logger logger = LoggerFactory.getLogger(NettyResponseEncoder.class);
+    private Logger logger = LoggerFactory.getLogger(NettyRequestEncoder.class);
     /**
      * 编码
      * @param ctx 处理链上下文
-     * @param msg 响应消息
-     * @param out 输出二进制字节数组
+     * @param msg Netty请求
+     * @param out 二进制字节数组
      */
     @SuppressWarnings("Duplicates")
     @Override
-    protected void encode(ChannelHandlerContext ctx, NettyResponse msg, ByteBuf out){
+    protected void encode(ChannelHandlerContext ctx, NettyRequest msg, ByteBuf out) {
         ObjectMapper mapper = new ObjectMapper();
         int headerLength = 0;
         byte[] headerBytes = null;
@@ -47,7 +47,7 @@ public class NettyResponseEncoder extends MessageToByteEncoder<NettyResponse> {
                         && msg.getHeaders().size() > 0){
                     headerBytes = mapper.writeValueAsString(
                             msg.getHeaders()).getBytes(
-                                    NettyConstants.CHARSET_UTF8);
+                            NettyConstants.CHARSET_UTF8);
                     headerLength = headerBytes.length;
                 }
                 out.writeInt(headerLength);
@@ -60,7 +60,7 @@ public class NettyResponseEncoder extends MessageToByteEncoder<NettyResponse> {
                 out.writeBytes(msg.getData());
             }
         } catch (Exception e) {
-            logger.error("Netty响应编码异常",e);
+            logger.error("Netty请求编码异常",e);
         }
     }
 }

@@ -1,8 +1,8 @@
 /*
- * FileName: NettyServerConfiguration.java
+ * FileName: NettyClientConfiguration.java
  * Author:   Arshle
- * Date:     2018年06月25日
- * Description: Netty服务端配置类
+ * Date:     2018年06月26日
+ * Description: Netty客户端配置
  */
 package com.jsptpd.netty.configuration;
 
@@ -12,89 +12,102 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * 〈Netty服务端配置类〉<br>
- * 〈服务端配置〉
+ * 〈Netty客户端配置〉<br>
+ * 〈用于配置客户端〉
  *
  * @author Arshle
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本]（可选）
  */
-@Component("nettyServerConfiguration")
-public class NettyServerConfiguration {
+@Component("nettyClientConfiguration")
+public class NettyClientConfiguration {
     /**
-     * 服务端启动端口
+     * 服务端连接地址
      */
-    @Value("${netty.server.port:18000}")
-    private int port;
+    @Value("${netty.client.server.address:localhost}")
+    private String serverAddress;
+    /**
+     * 服务端口号
+     */
+    @Value("${netty.client.server.port:18000}")
+    private int serverPort;
     /**
      * 连接队列长度
      */
-    @Value("${netty.server.backLog:1024}")
+    @Value("${netty.client.backLog:1024}")
     private int backLog;
     /**
      * 禁用nagle算法,提升tcp传输效率
      */
-    @Value("${netty.server.tcpNoDelay:true}")
+    @Value("${netty.client.tcpNoDelay:true}")
     private boolean tcpNoDelay;
     /**
      * 是否保持心跳
      */
-    @Value("${netty.server.keepAlive:true}")
+    @Value("${netty.client.keepAlive:true}")
     private boolean keepAlive;
     /**
      * 连接超时时间
      */
-    @Value("${netty.server.connect.timeout.ms:10000}")
+    @Value("${netty.client.connect.timeout.ms:10000}")
     private int connectTimeout;
     /**
      * 每次循环写操作的最大数量
      */
-    @Value("${netty.server.write.spin.count:16}")
+    @Value("${netty.client.write.spin.count:16}")
     private int writeSpinCount;
     /**
      * 是否自动读取数据
      */
-    @Value("${netty.server.auto.read:true}")
+    @Value("${netty.client.auto.read:true}")
     private boolean autoRead;
     /**
      * 是否单线程执行pipeline
      */
-    @Value("${netty.server.single.event.executor.per.group:true}")
+    @Value("${netty.client.single.event.executor.per.group:true}")
     private boolean singleEventExecutorPerGroup;
     /**
      * 是否可以重复使用端口
      */
-    @Value("${netty.server.reuse.addr:false}")
+    @Value("${netty.client.reuse.addr:false}")
     private boolean reuseAddr;
     /**
      * 关闭socket的延时时间，默认关闭
      */
-    @Value("${netty.server.linger:-1}")
+    @Value("${netty.client.linger:-1}")
     private int linger;
     /**
      * 远端关闭时是否保持本端连接
      */
-    @Value("${netty.server.allow.half.closure:false}")
+    @Value("${netty.client.allow.half.closure:false}")
     private boolean allowHalfClosure;
     /**
      * 是否解码请求
      */
-    @Value("${netty.server.decode.request:true}")
-    private boolean decodeRequest;
+    @Value("${netty.client.decode.response:true}")
+    private boolean decodeResponse;
     /**
      * 是否编码响应
      */
-    @Value("${netty.server.encode.response:true}")
-    private boolean encodeResponse;
+    @Value("${netty.client.encode.request:true}")
+    private boolean encodeRequest;
     /**
      * Getters、Setters
      */
-    public int getPort() {
-        return port;
+    public String getServerAddress() {
+        return serverAddress;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 
     public int getBackLog() {
@@ -177,20 +190,20 @@ public class NettyServerConfiguration {
         this.allowHalfClosure = allowHalfClosure;
     }
 
-    public boolean isDecodeRequest() {
-        return decodeRequest;
+    public boolean isDecodeResponse() {
+        return decodeResponse;
     }
 
-    public void setDecodeRequest(boolean decodeRequest) {
-        this.decodeRequest = decodeRequest;
+    public void setDecodeResponse(boolean decodeResponse) {
+        this.decodeResponse = decodeResponse;
     }
 
-    public boolean isEncodeResponse() {
-        return encodeResponse;
+    public boolean isEncodeRequest() {
+        return encodeRequest;
     }
 
-    public void setEncodeResponse(boolean encodeResponse) {
-        this.encodeResponse = encodeResponse;
+    public void setEncodeRequest(boolean encodeRequest) {
+        this.encodeRequest = encodeRequest;
     }
 
     @Override

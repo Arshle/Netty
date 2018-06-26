@@ -20,6 +20,7 @@
   </properties>
   <!--dependencies-->
   <dependencies>
+    <!--netty-common-->
     <dependency>
       <groupId>com.jsptpd.netty</groupId>
       <artifactId>netty-common</artifactId>

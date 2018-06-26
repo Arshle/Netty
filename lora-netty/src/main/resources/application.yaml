@@ -1,4 +1,15 @@
 netty:
   server:
     port: 18000
-
+    decode:
+      request: true
+    encode:
+      response: true
+  client:
+    server:
+      address: localhost
+      port: 18000
+    decode:
+      response: true
+    encode:
+      request: true

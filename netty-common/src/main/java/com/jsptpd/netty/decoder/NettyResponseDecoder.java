@@ -1,14 +1,14 @@
 /*
- * FileName: NettyRequestDecoder.java
+ * FileName: NettyResponseDecoder.java
  * Author:   Arshle
- * Date:     2018年06月25日
- * Description: Netty客户端请求解码器，用于客户端与服务端统一的解码
+ * Date:     2018年06月26日
+ * Description: Netty响应解码器
  */
 package com.jsptpd.netty.decoder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsptpd.netty.constants.NettyConstants;
-import com.jsptpd.netty.model.NettyRequest;
+import com.jsptpd.netty.model.NettyResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -18,23 +18,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 〈Netty客户端请求解码器，用于客户端与服务端统一的解码〉<br>
- * 〈将客户端序列化后的NettyRequest解码〉
+ * 〈Netty响应解码器〉<br>
+ * 〈用于将二进制字节数组解码成pojo出站操作〉
  *
  * @author Arshle
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本]（可选）
  */
-public class NettyRequestDecoder extends ByteToMessageDecoder {
+public class NettyResponseDecoder extends ByteToMessageDecoder {
 
-    private Logger logger = LoggerFactory.getLogger(NettyRequestDecoder.class);
+    private Logger logger = LoggerFactory.getLogger(NettyResponseDecoder.class);
     /**
      * 解码
      * @param ctx 处理链上下文
-     * @param in 入站字节数组
-     * @param out 解码后的对象
+     * @param in 二进制字节数组
+     * @param out 出站pojo
      */
-    @SuppressWarnings({"unchecked", "Duplicates"})
+    @SuppressWarnings({"Duplicates", "unchecked"})
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out){
         while (true){
@@ -84,11 +84,11 @@ public class NettyRequestDecoder extends ByteToMessageDecoder {
                     byte[] data = new byte[dataLength];
                     in.readBytes(data);
                     //解析出请求对象，像后面handler传递
-                    NettyRequest request = NettyRequest.valueOf(headers, data);
-                    out.add(request);
-                    logger.info("Netty请求解码完成|request:" + request);
+                    NettyResponse response = NettyResponse.valueOf(headers, data);
+                    out.add(response);
+                    logger.info("Netty响应解码完成|response:" + response);
                 } catch (Exception e) {
-                    logger.error("解析Netty请求异常",e);
+                    logger.error("解析Netty响应异常",e);
                 }
             }else{
                 break;
