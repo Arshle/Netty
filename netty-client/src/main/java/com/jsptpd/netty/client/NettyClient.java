@@ -100,6 +100,9 @@ public class NettyClient {
      */
     public static void connect(){
         try {
+            if(channel != null && channel.isActive()){
+                channel.close();
+            }
             ChannelFuture future = bootstrap.connect(new InetSocketAddress(clientConfig.getServerAddress(), clientConfig.getServerPort())).sync();
             future.addListener(new ChannelFutureListener() {
                 /**
@@ -120,7 +123,11 @@ public class NettyClient {
      * 关闭Netty客户端连接
      */
     public static void shutdown(){
-        worker.shutdownGracefully();
+        if(channel != null && channel.isActive()){
+            channel.close();
+            channel = null;
+            logger.info("Netty客户端连接已关闭");
+        }
     }
     /**
      * 获取连接通道

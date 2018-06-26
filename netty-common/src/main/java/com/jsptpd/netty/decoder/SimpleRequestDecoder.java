@@ -6,13 +6,13 @@
  */
 package com.jsptpd.netty.decoder;
 
-import com.jsptpd.netty.constants.NettyConstants;
 import com.jsptpd.netty.model.NettyRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,7 +41,7 @@ public class SimpleRequestDecoder extends ByteToMessageDecoder {
                 byte[] data = new byte[dataLength];
                 in.readBytes(data);
                 try {
-                    logger.info("解码Netty请求数据|length:" + data.length + "|data:" + new String(data,NettyConstants.CHARSET_UTF8));
+                    logger.info("解码Netty请求数据|length:" + data.length + "|data:" + Arrays.toString(data));
                     out.add(NettyRequest.valueOf(data));
                 } catch (Exception e) {
                     logger.error("解码Netty请求异常",e);

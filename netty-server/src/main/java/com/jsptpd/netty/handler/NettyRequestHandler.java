@@ -53,6 +53,20 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
         }
     }
     /**
+     * 通道关闭
+     * @param ctx 处理链上下文
+     * @throws Exception 异常
+     */
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        SocketAddress address = ctx.channel().remoteAddress();
+        if(address != null){
+            logger.info("Netty关闭客户端连接|客户端地址:" + address);
+        }
+    }
+
+    /**
      * 异常捕获
      * @param ctx 处理链上下文
      * @param cause 异常
@@ -61,7 +75,7 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         super.exceptionCaught(ctx, cause);
-        logger.error("Netty处理消息异常",cause);
+        logger.error("Netty处理消息异常:" + cause.getMessage());
         //如果消息在第一次接受就存在异常，转交给开发第一个处理器进行处理
         if(NettyServerHandlerScanner.serverHandlers.size() > 0){
             NettyServerHandlerScanner.serverHandlers.get(0).handleException(cause);

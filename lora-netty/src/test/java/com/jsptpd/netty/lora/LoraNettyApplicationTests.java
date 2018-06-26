@@ -35,7 +35,6 @@ public class LoraNettyApplicationTests {
         try {
             Thread.sleep(3000);
             NettyClient.connect();
-            Thread.sleep(3000);
             NettyClient.sendString("数据发送自客户端");
             Thread.sleep(Integer.MAX_VALUE);
         } catch (InterruptedException e) {

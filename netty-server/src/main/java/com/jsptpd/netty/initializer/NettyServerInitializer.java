@@ -1,5 +1,5 @@
 /*
- * FileName: NettyInitializer.java
+ * FileName: NettyServerInitializer.java
  * Author:   Arshle
  * Date:     2018年06月26日
  * Description: Netty服务端启动类
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本]（可选）
  */
-@Component("nettyInitializer")
-public class NettyInitializer implements CommandLineRunner {
+@Component("nettyServerInitializer")
+public class NettyServerInitializer implements CommandLineRunner {
     /**
      * 程序启动运行
      * @param args 参数

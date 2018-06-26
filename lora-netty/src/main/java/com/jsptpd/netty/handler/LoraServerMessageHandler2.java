@@ -28,10 +28,12 @@ public class LoraServerMessageHandler2 implements NettyServerMessageHandler {
     @Override
     public void handleRequest(NettyRequest request, NettyResponseWriter writer) {
         logger.info("lora2接收消息:" + request);
+        writer.writeString("收到消息");
+        throw new RuntimeException("test Exception");
     }
 
     @Override
     public void handleException(Throwable cause) {
-
+        logger.error("处理异常",cause);
     }
 }

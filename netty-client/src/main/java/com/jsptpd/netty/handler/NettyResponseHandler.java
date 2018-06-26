@@ -6,7 +6,9 @@
  */
 package com.jsptpd.netty.handler;
 
+import com.jsptpd.netty.intf.NettyClientMessageHandler;
 import com.jsptpd.netty.model.NettyResponse;
+import com.jsptpd.netty.scanner.NettyClientHandlerScanner;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -31,6 +33,13 @@ public class NettyResponseHandler extends SimpleChannelInboundHandler<NettyRespo
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, NettyResponse msg){
         logger.info("接收Netty服务端响应:" + msg);
+        for(NettyClientMessageHandler handler : NettyClientHandlerScanner.clientHandlers){
+            try {
+                handler.handleResponse(msg);
+            } catch (Exception e) {
+                handler.handleException(e);
+            }
+        }
     }
     /**
      * 异常捕获
@@ -41,6 +50,10 @@ public class NettyResponseHandler extends SimpleChannelInboundHandler<NettyRespo
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         super.exceptionCaught(ctx, cause);
-        logger.error("Netty处理消息异常",cause);
+        logger.error("Netty处理消息异常:" + cause.getMessage());
+        //如果消息在第一次接受就存在异常，转交给开发第一个处理器进行处理
+        if(NettyClientHandlerScanner.clientHandlers.size() > 0){
+            NettyClientHandlerScanner.clientHandlers.get(0).handleException(cause);
+        }
     }
 }
