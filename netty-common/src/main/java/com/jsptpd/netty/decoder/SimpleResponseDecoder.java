@@ -7,7 +7,6 @@
 package com.jsptpd.netty.decoder;
 
 import com.jsptpd.netty.constants.NettyConstants;
-import com.jsptpd.netty.model.NettyRequest;
 import com.jsptpd.netty.model.NettyResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

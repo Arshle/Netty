@@ -6,9 +6,10 @@
  */
 package com.jsptpd.netty.handler;
 
-import com.jsptpd.netty.constants.NettyConstants;
+import com.jsptpd.netty.intf.NettyServerMessageHandler;
 import com.jsptpd.netty.model.NettyRequest;
-import com.jsptpd.netty.model.NettyResponse;
+import com.jsptpd.netty.scanner.NettyServerHandlerScanner;
+import com.jsptpd.netty.writer.NettyResponseWriter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -30,11 +31,12 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, NettyRequest msg){
         logger.info("接收Netty请求:" + msg);
-        try {
-            ctx.write(NettyResponse.valueOf("服务端回复".getBytes(NettyConstants.CHARSET_UTF8)));
-            ctx.flush();
-        } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+        for(NettyServerMessageHandler handler : NettyServerHandlerScanner.serverHandlers){
+            try {
+                handler.handleRequest(msg,new NettyResponseWriter(ctx));
+            } catch (Exception e) {
+                handler.handleException(e);
+            }
         }
     }
     /**
@@ -47,7 +49,7 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
         super.channelActive(ctx);
         SocketAddress address = ctx.channel().remoteAddress();
         if(address != null){
-            logger.info("Netty建立与客户端连接|remoteAddress:" + address);
+            logger.info("Netty建立与客户端连接|客户端地址:" + address);
         }
     }
     /**
@@ -60,5 +62,9 @@ public class NettyRequestHandler extends SimpleChannelInboundHandler<NettyReques
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         super.exceptionCaught(ctx, cause);
         logger.error("Netty处理消息异常",cause);
+        //如果消息在第一次接受就存在异常，转交给开发第一个处理器进行处理
+        if(NettyServerHandlerScanner.serverHandlers.size() > 0){
+            NettyServerHandlerScanner.serverHandlers.get(0).handleException(cause);
+        }
     }
 }

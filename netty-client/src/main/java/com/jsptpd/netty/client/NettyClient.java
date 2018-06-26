@@ -16,10 +16,7 @@ import com.jsptpd.netty.model.NettyRequest;
 import com.jsptpd.netty.utils.SpringUtils;
 import com.jsptpd.netty.utils.StringUtils;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.Unpooled;
-import io.netty.buffer.UnpooledByteBufAllocator;
+import io.netty.buffer.*;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -111,7 +108,7 @@ public class NettyClient {
                  */
                 @Override
                 public void operationComplete(ChannelFuture future){
-                    logger.info("Netty连接建立,server:" + clientConfig.getServerAddress() + ":" + clientConfig.getServerPort());
+                    logger.info("Netty建立与服务端连接,服务端地址:" + clientConfig.getServerAddress() + ":" + clientConfig.getServerPort());
                     channel = future.channel();
                 }
             });
@@ -155,6 +152,10 @@ public class NettyClient {
             if(data == null){
                 return;
             }
+            //断开连接重连
+            if(channel == null || !channel.isActive()){
+                connect();
+            }
             //编解码客户端和服务端协议要保持一致
             //若客户端将配置netty.client.encode.request设置为true
             //服务端解码时要将netty.server.decode.request也设置为true
@@ -162,9 +163,9 @@ public class NettyClient {
             if(clientConfig.isEncodeRequest()){
                 sendNettyRequest(NettyRequest.valueOf(data));
             }else{
-                ByteBuf buffer = Unpooled.buffer(data.length);
+                ByteBuf buffer = PooledByteBufAllocator.DEFAULT.buffer(data.length);
                 buffer.writeBytes(data);
-                channel.writeAndFlush(data);
+                channel.writeAndFlush(buffer);
             }
         } catch (Exception e) {
             logger.error("发送字节数组异常",e);
@@ -177,6 +178,10 @@ public class NettyClient {
     public static void sendNettyRequest(NettyRequest request){
         if(request == null || request.getData() == null){
             return;
+        }
+        //断开连接重连
+        if(channel == null || !channel.isActive()){
+            connect();
         }
         //客户端设置不编码nettyRequest,仅发送字节数组数据,无法对编码统一协议
         //因此不允许发送NettyRequest编码消息
