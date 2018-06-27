@@ -9,7 +9,7 @@ netty:
     server:
       address: localhost
       port: 18000
-    decode:
-      response: false
     encode:
       request: false
+    decode:
+      response: false

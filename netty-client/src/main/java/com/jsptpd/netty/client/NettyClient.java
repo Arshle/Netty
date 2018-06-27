@@ -41,10 +41,6 @@ public class NettyClient {
      */
     private static Bootstrap bootstrap = new Bootstrap();
     /**
-     * worker线程池
-     */
-    private static EventLoopGroup worker = new NioEventLoopGroup();
-    /**
      * 客户端配置
      */
     private static NettyClientConfiguration clientConfig = SpringUtils.getBean(NettyClientConfiguration.class);
@@ -55,6 +51,7 @@ public class NettyClient {
 
     static{
         //worker线程池
+        EventLoopGroup worker = new NioEventLoopGroup();
         bootstrap.group(worker);
         //设置通道工厂
         bootstrap.channel(NioSocketChannel.class);

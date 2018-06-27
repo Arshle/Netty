@@ -39,4 +39,15 @@
       </plugins>
     </pluginManagement>
   </build>
+  <!--distributionManagement-->
+  <distributionManagement>
+    <snapshotRepository>
+      <id>jsptpd-snapshot</id>
+      <url>http://172.16.11.71:31467/repository/maven-snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>jsptpd-release</id>
+      <url>http://172.16.11.71:31467/repository/maven-releases/</url>
+    </repository>
+  </distributionManagement>
 </project>
